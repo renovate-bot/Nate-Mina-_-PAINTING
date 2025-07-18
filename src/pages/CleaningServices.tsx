@@ -1,8 +1,15 @@
 import React from 'react';
+import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Sparkles, Home, Zap, Calendar, CheckCircle, Shield, Clock, Star } from 'lucide-react';
+import BookingModal from '../components/BookingModal';
 
 const CleaningServices = () => {
+  const [bookingModal, setBookingModal] = useState<{isOpen: boolean; serviceType: 'cleaning' | 'painting' | ''}>({
+    isOpen: false,
+    serviceType: 'cleaning'
+  });
+
   const services = [
     {
       icon: <Calendar className="h-8 w-8 text-teal-600" />,
@@ -71,6 +78,13 @@ const CleaningServices = () => {
               >
                 Schedule Cleaning
               </Link>
+              <button
+                onClick={() => setBookingModal({isOpen: true, serviceType: 'cleaning'})}
+                className="bg-white border-2 border-white text-teal-900 px-8 py-3 rounded-md text-lg font-semibold hover:bg-gray-100 transition-colors inline-flex items-center space-x-2"
+              >
+                <Calendar className="h-5 w-5" />
+                <span>Book Online</span>
+              </button>
             </div>
           </div>
         </div>
@@ -110,12 +124,12 @@ const CleaningServices = () => {
                   ))}
                 </div>
                 <div className="text-lg font-semibold text-teal-600 mb-4">{service.price}</div>
-                <Link
-                  to="/contact"
+                <button
+                  onClick={() => setBookingModal({isOpen: true, serviceType: 'cleaning'})}
                   className="w-full bg-teal-600 text-white py-2 rounded-md hover:bg-teal-700 transition-colors text-center block"
                 >
                   Book Now
-                </Link>
+                </button>
               </div>
             </div>
           ))}
@@ -245,15 +259,23 @@ const CleaningServices = () => {
             >
               Schedule Cleaning
             </Link>
-            <Link
-              to="/gallery"
-              className="bg-transparent border-2 border-white text-white px-8 py-3 rounded-md text-lg font-semibold hover:bg-white hover:text-teal-700 transition-colors"
+            <button
+              onClick={() => setBookingModal({isOpen: true, serviceType: 'cleaning'})}
+              className="bg-transparent border-2 border-white text-white px-8 py-3 rounded-md text-lg font-semibold hover:bg-white hover:text-teal-700 transition-colors inline-flex items-center space-x-2"
             >
-              View Results
-            </Link>
+              <Calendar className="h-5 w-5" />
+              <span>Book Service</span>
+            </button>
           </div>
         </div>
       </section>
+
+      {/* Booking Modal */}
+      <BookingModal 
+        isOpen={bookingModal.isOpen}
+        onClose={() => setBookingModal({isOpen: false, serviceType: 'cleaning'})}
+        serviceType={bookingModal.serviceType}
+      />
     </div>
   );
 };

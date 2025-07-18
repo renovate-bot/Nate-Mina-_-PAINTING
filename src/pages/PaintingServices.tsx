@@ -1,8 +1,15 @@
 import React from 'react';
+import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Paintbrush, Home, Building, Palette, Shield, Clock, CheckCircle } from 'lucide-react';
+import { Paintbrush, Home, Building, Palette, Shield, Clock, CheckCircle, Calendar } from 'lucide-react';
+import BookingModal from '../components/BookingModal';
 
 const PaintingServices = () => {
+  const [bookingModal, setBookingModal] = useState<{isOpen: boolean; serviceType: 'cleaning' | 'painting' | ''}>({
+    isOpen: false,
+    serviceType: 'painting'
+  });
+
   const services = [
     {
       icon: <Home className="h-8 w-8 text-blue-600" />,
@@ -86,6 +93,13 @@ const PaintingServices = () => {
               >
                 Get Free Estimate
               </Link>
+              <button
+                onClick={() => setBookingModal({isOpen: true, serviceType: 'painting'})}
+                className="bg-white border-2 border-white text-blue-900 px-8 py-3 rounded-md text-lg font-semibold hover:bg-gray-100 transition-colors inline-flex items-center space-x-2"
+              >
+                <Calendar className="h-5 w-5" />
+                <span>Book Consultation</span>
+              </button>
             </div>
           </div>
         </div>
@@ -125,6 +139,12 @@ const PaintingServices = () => {
                   ))}
                 </div>
               </div>
+              <button
+                onClick={() => setBookingModal({isOpen: true, serviceType: 'painting'})}
+                className="w-full mt-4 bg-blue-600 text-white py-2 rounded-md hover:bg-blue-700 transition-colors"
+              >
+                Book This Service
+              </button>
             </div>
           ))}
         </div>
@@ -208,15 +228,23 @@ const PaintingServices = () => {
             >
               Get Free Quote
             </Link>
-            <Link
-              to="/gallery"
-              className="bg-transparent border-2 border-white text-white px-8 py-3 rounded-md text-lg font-semibold hover:bg-white hover:text-blue-700 transition-colors"
+            <button
+              onClick={() => setBookingModal({isOpen: true, serviceType: 'painting'})}
+              className="bg-transparent border-2 border-white text-white px-8 py-3 rounded-md text-lg font-semibold hover:bg-white hover:text-blue-700 transition-colors inline-flex items-center space-x-2"
             >
-              View Our Work
-            </Link>
+              <Calendar className="h-5 w-5" />
+              <span>Schedule Service</span>
+            </button>
           </div>
         </div>
       </section>
+
+      {/* Booking Modal */}
+      <BookingModal 
+        isOpen={bookingModal.isOpen}
+        onClose={() => setBookingModal({isOpen: false, serviceType: 'painting'})}
+        serviceType={bookingModal.serviceType}
+      />
     </div>
   );
 };

@@ -1,8 +1,18 @@
 import React from 'react';
+import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { ArrowRight, Paintbrush, Sparkles, Star, CheckCircle } from 'lucide-react';
+import { ArrowRight, Paintbrush, Sparkles, Star, CheckCircle, Calendar, Calculator } from 'lucide-react';
+import BookingModal from '../components/BookingModal';
+import ServiceCalculator from '../components/ServiceCalculator';
+import LiveChat from '../components/LiveChat';
+import FAQ from '../components/FAQ';
 
 const Home = () => {
+  const [bookingModal, setBookingModal] = useState<{isOpen: boolean; serviceType: 'cleaning' | 'painting' | ''}>({
+    isOpen: false,
+    serviceType: ''
+  });
+
   const services = [
     {
       icon: <Paintbrush className="h-8 w-8 text-blue-600" />,
@@ -56,12 +66,13 @@ const Home = () => {
                   <span>Get Free Quote</span>
                   <ArrowRight className="h-5 w-5" />
                 </Link>
-                <Link
-                  to="/gallery"
-                  className="bg-transparent border-2 border-white text-white px-8 py-3 rounded-md text-lg font-semibold hover:bg-white hover:text-blue-900 transition-colors"
+                <button
+                  onClick={() => setBookingModal({isOpen: true, serviceType: ''})}
+                  className="bg-transparent border-2 border-white text-white px-8 py-3 rounded-md text-lg font-semibold hover:bg-white hover:text-blue-900 transition-colors inline-flex items-center justify-center space-x-2"
                 >
-                  View Our Work
-                </Link>
+                  <Calendar className="h-5 w-5" />
+                  <span>Book Now</span>
+                </button>
               </div>
             </div>
           </div>
@@ -104,6 +115,13 @@ const Home = () => {
                 <span>Learn More</span>
                 <ArrowRight className="h-4 w-4" />
               </Link>
+              <button
+                onClick={() => setBookingModal({isOpen: true, serviceType: service.title.includes('Painting') ? 'painting' : 'cleaning'})}
+                className="ml-4 bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition-colors inline-flex items-center space-x-2"
+              >
+                <Calendar className="h-4 w-4" />
+                <span>Book Service</span>
+              </button>
             </div>
           ))}
         </div>
@@ -121,6 +139,19 @@ const Home = () => {
             ))}
           </div>
         </div>
+      </section>
+
+      {/* Service Calculator Section */}
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="text-center mb-12">
+          <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+            Get an Instant Estimate
+          </h2>
+          <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+            Use our service calculator to get an immediate estimate for your cleaning or painting project
+          </p>
+        </div>
+        <ServiceCalculator />
       </section>
 
       {/* Testimonials Preview */}
@@ -186,8 +217,30 @@ const Home = () => {
             <span>Get Started Today</span>
             <ArrowRight className="h-5 w-5" />
           </Link>
+          <button
+            onClick={() => setBookingModal({isOpen: true, serviceType: ''})}
+            className="bg-transparent border-2 border-white text-white px-8 py-3 rounded-md text-lg font-semibold hover:bg-white hover:text-blue-700 transition-colors inline-flex items-center space-x-2"
+          >
+            <Calendar className="h-5 w-5" />
+            <span>Book Online</span>
+          </button>
         </div>
       </section>
+
+      {/* FAQ Section */}
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <FAQ />
+      </section>
+
+      {/* Live Chat Component */}
+      <LiveChat />
+
+      {/* Booking Modal */}
+      <BookingModal 
+        isOpen={bookingModal.isOpen}
+        onClose={() => setBookingModal({isOpen: false, serviceType: ''})}
+        serviceType={bookingModal.serviceType}
+      />
     </div>
   );
 };

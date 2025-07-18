@@ -1,7 +1,14 @@
 import React, { useState } from 'react';
-import { Phone, Mail, MapPin, Clock, Send, CheckCircle } from 'lucide-react';
+import { Phone, Mail, MapPin, Clock, Send, CheckCircle, Calendar } from 'lucide-react';
+import BookingModal from '../components/BookingModal';
+import ServiceCalculator from '../components/ServiceCalculator';
 
 const Contact = () => {
+  const [bookingModal, setBookingModal] = useState<{isOpen: boolean; serviceType: 'cleaning' | 'painting' | ''}>({
+    isOpen: false,
+    serviceType: ''
+  });
+
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -360,10 +367,37 @@ const Contact = () => {
                 <Phone className="h-5 w-5" />
                 <span>Call Now: (555) 123-4567</span>
               </a>
+              <button
+                onClick={() => setBookingModal({isOpen: true, serviceType: ''})}
+                className="inline-flex items-center space-x-2 bg-blue-600 text-white px-6 py-3 rounded-md hover:bg-blue-700 transition-colors"
+              >
+                <Calendar className="h-5 w-5" />
+                <span>Book Online</span>
+              </button>
             </div>
           </div>
         </div>
       </section>
+
+      {/* Service Calculator Section */}
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="text-center mb-12">
+          <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+            Service Calculator
+          </h2>
+          <p className="text-xl text-gray-600">
+            Get an instant estimate for your project
+          </p>
+        </div>
+        <ServiceCalculator />
+      </section>
+
+      {/* Booking Modal */}
+      <BookingModal 
+        isOpen={bookingModal.isOpen}
+        onClose={() => setBookingModal({isOpen: false, serviceType: ''})}
+        serviceType={bookingModal.serviceType}
+      />
     </div>
   );
 };
